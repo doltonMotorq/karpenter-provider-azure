@@ -22,14 +22,8 @@ jobs:
         
     - uses: ./.github/actions/install-deps
     
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  
     - name: Build and publish image
       run: |
+        az login --use-device-code
         ko version
         RELEASE_ACR=${{ secrets.AZURE_REGISTRY }} ./hack/release/release.sh

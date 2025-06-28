@@ -26,4 +26,4 @@ jobs:
       run: |
         az login --use-device-code
         ko version
-        RELEASE_ACR=${{ secrets.AZURE_REGISTRY }} ./hack/release/release.sh
+        RELEASE_ACR=motorqcustomer.azurecr.io ./hack/release/release.sh

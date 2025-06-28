@@ -248,7 +248,7 @@ var (
 		"--client-ca-file":                    "/etc/kubernetes/certs/ca.crt",
 		"--cloud-config":                      "/etc/kubernetes/azure.json",
 		"--cloud-provider":                    "external",
-		"--cluster-dns":                       "10.0.0.10",
+		"--cluster-dns":                       "11.0.0.10",
 		"--cluster-domain":                    "cluster.local",
 		"--enforce-node-allocatable":          "pods",
 		"--event-qps":                         "0",

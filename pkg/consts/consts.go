@@ -27,7 +27,5 @@ const (
 	NetworkDataplaneCilium = "cilium"
 	NetworkDataplaneAzure  = "azure"
 
-	ClusterDnsIP  = "10.0.0.10"
-
 	DefaultKubernetesMaxPods = 250
 )

@@ -27,5 +27,5 @@ const (
 	NetworkDataplaneCilium = "cilium"
 	NetworkDataplaneAzure  = "azure"
 
-	DefaultKubernetesMaxPods = 250
+	DefaultKubernetesMaxPods = 30
 )

@@ -248,7 +248,7 @@ var (
 		"--client-ca-file":                    "/etc/kubernetes/certs/ca.crt",
 		"--cloud-config":                      "/etc/kubernetes/azure.json",
 		"--cloud-provider":                    "external",
-		"--cluster-dns":                       "11.0.0.10",
+		"--cluster-dns":                       "10.0.0.10",
 		"--cluster-domain":                    "cluster.local",
 		"--enforce-node-allocatable":          "pods",
 		"--event-qps":                         "0",
@@ -456,6 +456,11 @@ func (a AKS) applyOptions(nbv *NodeBootstrapVariables) {
 	nbv.NetworkPlugin = a.NetworkPlugin
 	nbv.NetworkPolicy = a.NetworkPolicy
 	nbv.KubernetesVersion = a.KubernetesVersion
+
+	// Set cluster-dns flag
+	if a.ClusterDNS != "" {
+		kubeletFlagsBase["--cluster-dns"] = a.ClusterDNS
+	}
 
 	nbv.KubeBinaryURL = kubeBinaryURL(a.KubernetesVersion, a.Arch)
 	nbv.VNETCNILinuxPluginsURL = fmt.Sprintf("%s/azure-cni/v1.4.32/binaries/azure-vnet-cni-linux-%s-v1.4.32.tgz", globalAKSMirror, a.Arch)

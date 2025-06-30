@@ -11,6 +11,7 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-test.[a-z0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-dns.[a-z0-9]+'
 
 permissions:
   contents: read
@@ -38,4 +39,4 @@ jobs:
       run: |
         az login --identity
         ko version
-        RELEASE_ACR=${{ secrets.AZURE_REGISTRY }} ./hack/release/release.sh
+        RELEASE_ACR=motorqcustomer.azurecr.io ./hack/release/release.sh

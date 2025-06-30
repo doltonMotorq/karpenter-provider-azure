@@ -18,6 +18,7 @@ package options
 
 import (
 	"fmt"
+	"net"
 	"net/url"
 
 	"github.com/Azure/karpenter-provider-azure/pkg/consts"
@@ -29,13 +30,14 @@ import (
 func (o Options) Validate() error {
 	validate := validator.New()
 	return multierr.Combine(
-		o.validateRequiredFields(),
-		o.validateEndpoint(),
-		o.validateNetworkingOptions(),
-		o.validateVMMemoryOverheadPercent(),
-		o.validateVnetSubnetID(),
-		validate.Struct(o),
-	)
+	o.validateRequiredFields(),
+	o.validateEndpoint(),
+	o.validateNetworkingOptions(),
+	o.validateVMMemoryOverheadPercent(),
+	o.validateVnetSubnetID(),
+	o.validateClusterDNS(),
+	validate.Struct(o),
+)
 }
 
 func (o Options) validateNetworkingOptions() error {
@@ -98,6 +100,14 @@ func (o Options) validateRequiredFields() error {
 	}
 	if o.SubnetID == "" {
 		return fmt.Errorf("missing field, vnet-subnet-id")
+	}
+	return nil
+}
+
+func (o Options) validateClusterDNS() error {
+	// Validate that it's a valid IPv4 address
+	if ip := net.ParseIP(o.ClusterDNS); ip == nil || ip.To4() == nil {
+		return fmt.Errorf("cluster-dns must be a valid IPv4 address, got %q", o.ClusterDNS)
 	}
 	return nil
 }

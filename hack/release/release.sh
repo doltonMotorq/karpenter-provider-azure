@@ -19,3 +19,4 @@ if [[ "$(git status --porcelain)" != "" ]]; then
 fi
 
 release "${commit_sha}" "${git_tag#v}"
+

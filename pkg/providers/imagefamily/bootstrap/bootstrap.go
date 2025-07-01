@@ -27,6 +27,7 @@ type KubeletConfiguration struct {
 
 	// MaxPods is the maximum number of pods that can run on a worker node instance.
 	MaxPods int32
+	DNSServiceIP string
 
 	SystemReserved map[string]string
 	// KubeReserved contains resources reserved for Kubernetes system components.

@@ -18,7 +18,6 @@ package options
 
 import (
 	"fmt"
-	"net"
 	"net/url"
 	"regexp"
 
@@ -39,7 +38,6 @@ func (o *Options) Validate() error {
 		o.validateNetworkingOptions(),
 		o.validateVMMemoryOverheadPercent(),
 		o.validateVnetSubnetID(),
-		o.validateClusterDNS(),
 		o.validateProvisionMode(),
 		o.validateUseSIG(),
 		o.validateAdminUsername(),
@@ -75,14 +73,6 @@ func (o *Options) validateVnetSubnetID() error {
 	_, err := utils.GetVnetSubnetIDComponents(o.SubnetID)
 	if err != nil {
 		return fmt.Errorf("vnet-subnet-id is invalid: %w", err)
-	}
-	return nil
-}
-
-func (o Options) validateClusterDNS() error {
-	// Validate that it's a valid IPv4 address
-	if ip := net.ParseIP(o.ClusterDNS); ip == nil || ip.To4() == nil {
-		return fmt.Errorf("cluster-dns must be a valid IPv4 address, got %q", o.ClusterDNS)
 	}
 	return nil
 }

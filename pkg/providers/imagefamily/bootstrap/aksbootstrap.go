@@ -47,7 +47,6 @@ type AKS struct {
 	NetworkPlugin                  string
 	NetworkPolicy                  string
 	KubernetesVersion              string
-	ClusterDNS                     string
 }
 
 var _ Bootstrapper = (*AKS)(nil) // assert AKS implements Bootstrapper
@@ -341,8 +340,6 @@ func (a AKS) applyOptions(nbv *NodeBootstrapVariables) {
 		kubeletFlagsBase["--feature-gates"] = "DisableKubeletCloudCredentialProviders=false"
 		kubeletFlagsBase["--azure-container-registry-config"] = "/etc/kubernetes/azure.json"
 	}
-	// Set cluster-dns flag
-	kubeletFlagsBase["--cluster-dns"] = a.ClusterDNS
 	// merge and stringify taints
 	kubeletFlags := lo.Assign(kubeletFlagsBase)
 	if len(a.Taints) > 0 {
@@ -420,6 +417,9 @@ func kubeletConfigToMap(kubeletConfig *KubeletConfiguration) map[string]string {
 	}
 	if len(kubeletConfig.AllowedUnsafeSysctls) > 0 {
 		args["--allowed-unsafe-sysctls"] = strings.Join(kubeletConfig.AllowedUnsafeSysctls, ",")
+	}
+	if kubeletConfig.DNSServiceIP != "" {
+		args["--cluster-dns"] = kubeletConfig.DNSServiceIP
 	}
 
 	return args

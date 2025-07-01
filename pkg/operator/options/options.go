@@ -69,7 +69,7 @@ type Options struct {
 	KubeletClientTLSBootstrapToken string  `json:"-"` // => TLSBootstrapToken in bootstrap (may need to be per node/nodepool)
 	LinuxAdminUsername             string  `json:"-"`
 	SSHPublicKey                   string  `json:"-"` // ssh.publicKeys.keyData => VM SSH public key // TODO: move to v1beta1.AKSNodeClass?
-	ClusterDNS                     string  `json:"-"` // ClusterDNS is the DNS server IP address for the cluster.
+	ClusterDNS                     string  `json:"clusterDns,omitempty"` // ClusterDNS is the DNS server IP address for the cluster.
 
 	NetworkPlugin     string `json:"networkPlugin,omitempty"`     // => NetworkPlugin in bootstrap
 	NetworkPolicy     string `json:"networkPolicy,omitempty"`     // => NetworkPolicy in bootstrap

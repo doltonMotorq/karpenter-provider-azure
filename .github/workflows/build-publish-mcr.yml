@@ -1,41 +1,29 @@
-# This Github action builds and publishes image to Azure Container Registry (ACR),
-# from where it is automatically propagated to Microsoft Container Registry (MCR).
-
 name: Build and publish to MCR
 on:
   push:
-    # Only release on supported semantic version tagging e.g. v0.0.1-rc.0
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-alpha.[0-9]+'
       - 'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+-test.[a-z0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-dns.[0-9]+'
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish-images:
-    permissions:
-      contents: read
-      id-token: write # This is required for requesting the JWT
-    runs-on:
-      labels: [self-hosted, "1ES.Pool=${{ vars.RELEASE_1ES_POOL }}"]
+    runs-on: ubuntu-latest
     steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
-      with:
-        egress-policy: audit
-
-    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+    - uses: actions/checkout@v4.2.1
       with:
         fetch-depth: 0
         
     - uses: ./.github/actions/install-deps
-  
+    
     - name: Build and publish image
       run: |
-        az login --identity
+        az login --use-device-code
         ko version
-        RELEASE_ACR=${{ secrets.AZURE_REGISTRY }} ./hack/release/release.sh
+        RELEASE_ACR=motorqcustomer.azurecr.io ./hack/release/release.sh
